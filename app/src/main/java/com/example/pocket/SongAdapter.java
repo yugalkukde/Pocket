@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 
 public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder> implements View.OnLongClickListener {
 
-    public static final String TAG = "SongList";
+    private static final String TAG = "SongList";
 
     private ActionMode mActionMode;
     private ArrayList<SongInfo> mSongList;
@@ -34,7 +35,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
         if (mActionMode != null) {
             return false;
         }
-        //mActionMode = set
+        //Toast.makeText(this)
 
         return true;
     }

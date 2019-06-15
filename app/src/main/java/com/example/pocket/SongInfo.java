@@ -8,7 +8,7 @@ public class SongInfo implements Parcelable {
 
     final public static Uri sArtworkUriNotification = Uri
             .parse("content://media/external/audio/albumart");
-    public Creator<SongInfo> CREATOR = new Creator<SongInfo>() {
+    public static final Creator<SongInfo> CREATOR = new Creator<SongInfo>() {
         @Override
         public SongInfo createFromParcel(Parcel in) {
             return new SongInfo(in);
@@ -31,7 +31,7 @@ public class SongInfo implements Parcelable {
         this.getAlbum_id = getAlbum_id;
     }
 
-    protected SongInfo(Parcel in) {
+    private SongInfo(Parcel in) {
         name = in.readString();
         artist = in.readString();
         data = in.readString();

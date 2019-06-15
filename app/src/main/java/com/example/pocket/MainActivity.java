@@ -6,18 +6,13 @@ import android.content.ContentUris;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.graphics.Palette;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -29,7 +24,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 
@@ -46,7 +40,6 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     private boolean boolIsPlaying = false;
     private ImageView mAlbumArt;
     private TextView mTextView;
-    private Palette.Swatch lightVibrantColor;
 
 
     @Override
@@ -66,16 +59,6 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
 
         checkPlaying("onCreate");
         getSongListAndPopulate();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
     }
 
     public void openPopup(View v) {
@@ -106,8 +89,8 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
             }
         } catch (NullPointerException npe) {
             npe.printStackTrace();
-        } catch (IllegalStateException ex) {
-            ex.printStackTrace();
+        } catch (IllegalStateException ise) {
+            ise.printStackTrace();
         }
 
         checkPlaying("getSongListAndPopulate");
@@ -132,40 +115,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
                 SongInfo si = songList.get(position);
                 Uri uri = ContentUris.withAppendedId(sArtworkUri,
                         si.getAlbum_id());
-                Picasso.get()
-                        .load(uri)
-                        .error(R.drawable.ic_empty_music)
-                        .into(new Target() {
-                            @Override
-                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                                Palette.from(bitmap).maximumColorCount(32).generate(new Palette.PaletteAsyncListener() {
-                                    @Override
-                                    public void onGenerated(@Nullable Palette palette) {
-                                        lightVibrantColor = palette.getLightVibrantSwatch();
-                                        if (lightVibrantColor != null) {
-                                            mTextView.setTextColor(lightVibrantColor.getBodyTextColor());
-                                            mTextView.setBackgroundColor(lightVibrantColor.getRgb());
-                                        } else {
-                                            mTextView.setTextColor(Color.BLACK);
-                                            mTextView.setBackgroundColor(Color.TRANSPARENT);
-                                            Log.i(TAG, "onGenerated: Cannot Load Swatch");
-                                        }
-                                    }
-                                });
-                                mAlbumArt.setImageBitmap(bitmap);
-                            }
-
-                            @Override
-                            public void onBitmapFailed(Exception e, Drawable errorDrawable) {
-
-                            }
-
-                            @Override
-                            public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-                            }
-                        });
-
+                Picasso.get().load(uri).into(mAlbumArt);
 
                 mTextView.setText(si.getName());
 
@@ -213,5 +163,11 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
 
     public void stopMusic(View view) {
         checkPlaying("pause button");
+    }
+
+    public void prev(View view) {
+    }
+
+    public void next(View view) {
     }
 }
